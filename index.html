@@ -1,0 +1,2004 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SJBIT Robotics - Flow Wave</title>
+    <meta name="description" content="Official portal of SJBIT Robotics Club featuring the interactive Three.js Flow Wave particle sea simulation, robotic arm project showcase, and IMPULSE 2026 ECE Department achievement." />
+    <meta property="og:title" content="SJBIT Robotics - Flow Wave" />
+    <meta property="og:description" content="Official portal of SJBIT Robotics Club featuring the interactive Three.js Flow Wave particle sea simulation, robotic arm project showcase, and IMPULSE 2026 ECE Department achievement." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#02160c" />
+    <link rel="canonical" href="https://yourdomain.com/" />
+
+    <!-- Google tag (gtag.js) GA4 & Conversion Tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TRACKINGID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-TRACKINGID', {
+        'anonymize_ip': true,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.143.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.143.0/examples/jsm/"
+      }
+    }
+    </script>
+
+    <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        color: #e0f7eb;
+        font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        overflow-x: hidden;
+      }
+      #scene {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        pointer-events: none;
+      }
+      #scroll-host {
+        position: relative;
+        width: 100%;
+        min-height: 620vh;
+        height: auto;
+        z-index: 2;
+        pointer-events: none;
+      }
+      #scroll-hint {
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: rgba(52, 232, 154, 0.6);
+        pointer-events: none;
+        z-index: 10;
+        font-family: 'JetBrains Mono', monospace;
+        transition: opacity 0.5s ease;
+      }
+
+      /* Navigation Bar */
+      .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 28px;
+        background: rgba(2, 22, 12, 0.75);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(52, 232, 154, 0.15);
+        pointer-events: auto;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: #fff;
+      }
+      .brand-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #0aff7f, #02160c);
+        border: 1px solid #34e89a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 16px rgba(10, 255, 127, 0.4);
+      }
+      .brand-title {
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: 0.05em;
+        color: #fff;
+      }
+      .brand-sub {
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        color: #34e89a;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .nav-link {
+        color: rgba(224, 247, 235, 0.7);
+        text-decoration: none;
+        font-size: 13px;
+        letter-spacing: 0.05em;
+        transition: color 0.2s, text-shadow 0.2s;
+        cursor: pointer;
+      }
+      .nav-link:hover {
+        color: #34e89a;
+        text-shadow: 0 0 8px rgba(52, 232, 154, 0.6);
+      }
+
+      /* Sections Overlay container */
+      .overlay-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+        z-index: 5;
+      }
+      .story-section {
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 100px 32px 80px;
+        pointer-events: none;
+      }
+      .section-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        width: 100%;
+        pointer-events: auto;
+      }
+
+      /* Cyber Card styling */
+      .cyber-card {
+        background: rgba(2, 22, 12, 0.78);
+        border: 1px solid rgba(52, 232, 154, 0.25);
+        border-radius: 16px;
+        padding: 32px;
+        backdrop-filter: blur(16px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(52, 232, 154, 0.05);
+        position: relative;
+        overflow: hidden;
+      }
+      .cyber-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #34e89a, #0aff7f, transparent);
+      }
+      .tech-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: rgba(52, 232, 154, 0.12);
+        color: #34e89a;
+        border: 1px solid rgba(52, 232, 154, 0.3);
+      }
+      .glow-title {
+        font-size: clamp(34px, 5.5vw, 68px);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.08;
+        margin: 16px 0;
+        color: #fff;
+        text-shadow: 0 0 30px rgba(52, 232, 154, 0.3);
+      }
+      .glow-title span {
+        color: #34e89a;
+      }
+
+      /* Hero Stats Pill */
+      .telemetry-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 28px;
+        padding: 12px 18px;
+        border-radius: 12px;
+        background: rgba(2, 22, 12, 0.6);
+        border: 1px solid rgba(52, 232, 154, 0.2);
+        width: fit-content;
+      }
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .stat-label {
+        font-size: 10px;
+        color: rgba(52, 232, 154, 0.7);
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.1em;
+      }
+      .stat-val {
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      /* Grid layout for showcase */
+      .showcase-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 36px;
+        align-items: center;
+      }
+      @media (max-width: 900px) {
+        .showcase-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 768px) {
+        .nav-bar {
+          padding: 12px 18px;
+        }
+        .nav-links {
+          gap: 14px;
+        }
+        .nav-link {
+          font-size: 11px;
+        }
+        .brand-sub {
+          display: none;
+        }
+        .brand-title {
+          font-size: 16px;
+        }
+        .story-section {
+          padding: 85px 18px 50px;
+        }
+        .cyber-card {
+          padding: 24px 18px;
+        }
+        .telemetry-bar {
+          width: 100%;
+        }
+      }
+      @media (max-width: 540px) {
+        .nav-links {
+          display: none;
+        }
+        .nav-bar {
+          padding: 10px 14px;
+        }
+        .brand-icon {
+          width: 28px;
+          height: 28px;
+        }
+        .brand-title {
+          font-size: 14px;
+        }
+        .glow-title {
+          font-size: 28px;
+        }
+      }
+      .img-frame {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(52, 232, 154, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 24px rgba(10, 255, 127, 0.15);
+      }
+      .img-frame img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .img-frame:hover img {
+        transform: scale(1.03);
+      }
+      .img-corner-tag {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(2, 22, 12, 0.85);
+        border: 1px solid #34e89a;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        color: #34e89a;
+        letter-spacing: 0.1em;
+      }
+
+      /* Tech Spec tags */
+      .specs-list {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .specs-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: rgba(224, 247, 235, 0.88);
+      }
+      .spec-bullet {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #34e89a;
+        box-shadow: 0 0 8px #34e89a;
+        margin-top: 7px;
+        flex-shrink: 0;
+      }
+
+      /* Achievement highlight */
+      .achievement-card {
+        border-color: rgba(255, 215, 0, 0.3);
+        background: radial-gradient(circle at top right, rgba(10, 255, 127, 0.08), transparent 70%), rgba(2, 22, 12, 0.85);
+      }
+      .achievement-card::before {
+        background: linear-gradient(90deg, transparent, #ffd700, #34e89a, transparent);
+      }
+      .achievement-badge {
+        background: rgba(255, 215, 0, 0.12);
+        color: #ffe066;
+        border-color: rgba(255, 215, 0, 0.4);
+      }
+
+      /* Wings grid */
+      .wings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+        margin-top: 24px;
+      }
+      .wing-card {
+        background: rgba(2, 22, 12, 0.7);
+        border: 1px solid rgba(52, 232, 154, 0.18);
+        border-radius: 12px;
+        padding: 24px;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+      }
+      .wing-card:hover {
+        transform: translateY(-4px);
+        border-color: #34e89a;
+      }
+      .wing-num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: #34e89a;
+        margin-bottom: 8px;
+      }
+      .wing-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+        margin: 0 0 8px;
+      }
+      .wing-desc {
+        font-size: 13px;
+        line-height: 1.6;
+        color: rgba(224, 247, 235, 0.7);
+        margin: 0;
+      }
+
+      /* Core Team Styles */
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 20px;
+        margin-top: 24px;
+      }
+      .team-card {
+        background: rgba(2, 22, 12, 0.78);
+        border: 1px solid rgba(52, 232, 154, 0.22);
+        border-radius: 14px;
+        padding: 24px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        backdrop-filter: blur(12px);
+      }
+      .team-card:hover {
+        transform: translateY(-5px);
+        border-color: #34e89a;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 20px rgba(52, 232, 154, 0.15);
+      }
+      .team-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #34e89a, #0aff7f, transparent);
+      }
+      .team-card-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+      .team-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(52, 232, 154, 0.25), rgba(2, 22, 12, 0.85));
+        border: 1px solid #34e89a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        font-size: 16px;
+        color: #34e89a;
+        box-shadow: 0 0 12px rgba(52, 232, 154, 0.3);
+        flex-shrink: 0;
+      }
+      .team-role {
+        display: inline-block;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 3px 8px;
+        border-radius: 4px;
+        background: rgba(52, 232, 154, 0.12);
+        color: #34e89a;
+        border: 1px solid rgba(52, 232, 154, 0.3);
+      }
+      .team-role.lead {
+        background: rgba(255, 215, 0, 0.12);
+        color: #ffd700;
+        border-color: rgba(255, 215, 0, 0.4);
+      }
+      .team-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #fff;
+        margin: 0 0 4px;
+      }
+      .team-dept {
+        font-size: 11px;
+        color: rgba(52, 232, 154, 0.7);
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.05em;
+      }
+      .team-bio {
+        font-size: 13px;
+        line-height: 1.5;
+        color: rgba(224, 247, 235, 0.78);
+        margin: 0;
+      }
+
+
+      /* Auth Buttons, Modal & User Pill */
+      .auth-btn {
+        background: linear-gradient(135deg, rgba(10, 255, 127, 0.25), rgba(2, 22, 12, 0.85));
+        border: 1px solid #34e89a;
+        color: #fff;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .auth-btn:hover {
+        background: rgba(52, 232, 154, 0.35);
+        box-shadow: 0 0 16px rgba(52, 232, 154, 0.45);
+      }
+      .user-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(2, 22, 12, 0.85);
+        border: 1px solid rgba(52, 232, 154, 0.45);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: #34e89a;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .user-pill:hover {
+        border-color: #0aff7f;
+        box-shadow: 0 0 12px rgba(10, 255, 127, 0.3);
+      }
+      .user-pill-avatar {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #34e89a;
+        color: #02160c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 10px;
+      }
+      .logout-btn {
+        background: none;
+        border: none;
+        color: rgba(224, 247, 235, 0.5);
+        font-size: 11px;
+        cursor: pointer;
+        margin-left: 6px;
+        transition: color 0.2s;
+        padding: 0 4px;
+      }
+      .logout-btn:hover {
+        color: #ff5252;
+      }
+
+      /* Modal Overlay & Card */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .auth-modal {
+        background: rgba(2, 22, 12, 0.95);
+        border: 1px solid rgba(52, 232, 154, 0.35);
+        border-radius: 20px;
+        width: min(440px, 94vw);
+        padding: 32px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(52, 232, 154, 0.15);
+        position: relative;
+        transform: translateY(20px);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .modal-overlay.active .auth-modal {
+        transform: translateY(0);
+      }
+      .modal-close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: rgba(52, 232, 154, 0.1);
+        border: 1px solid rgba(52, 232, 154, 0.2);
+        color: #34e89a;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+      }
+      .modal-close:hover {
+        background: rgba(255, 82, 82, 0.2);
+        border-color: #ff5252;
+        color: #ff5252;
+      }
+      .auth-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 22px;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 4px;
+        border-radius: 10px;
+        border: 1px solid rgba(52, 232, 154, 0.18);
+      }
+      .auth-tab {
+        flex: 1;
+        padding: 8px 12px;
+        text-align: center;
+        border-radius: 8px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(224, 247, 235, 0.6);
+        cursor: pointer;
+        transition: all 0.2s;
+        background: transparent;
+        border: none;
+      }
+      .auth-tab.active {
+        background: rgba(52, 232, 154, 0.2);
+        color: #34e89a;
+        box-shadow: 0 0 12px rgba(52, 232, 154, 0.2);
+      }
+      .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        text-align: left;
+      }
+      .form-label {
+        font-size: 11px;
+        font-family: 'JetBrains Mono', monospace;
+        color: rgba(52, 232, 154, 0.85);
+        letter-spacing: 0.05em;
+        display: flex;
+        justify-content: space-between;
+      }
+      .form-input {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(52, 232, 154, 0.28);
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: #fff;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .form-input:focus {
+        border-color: #34e89a;
+        box-shadow: 0 0 12px rgba(52, 232, 154, 0.3);
+      }
+      .form-submit-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #0aff7f, #02160c);
+        border: 1px solid #34e89a;
+        color: #fff;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+        font-family: 'Space Grotesk', sans-serif;
+        box-shadow: 0 0 18px rgba(10, 255, 127, 0.35);
+        transition: all 0.25s;
+      }
+      .form-submit-btn:hover {
+        background: linear-gradient(135deg, #34e89a, #0aff7f);
+        color: #02160c;
+        box-shadow: 0 0 24px rgba(52, 232, 154, 0.6);
+      }
+      .form-toggle-link {
+        font-size: 12px;
+        color: rgba(224, 247, 235, 0.65);
+        text-align: center;
+        margin-top: 14px;
+      }
+      .form-toggle-link a {
+        color: #34e89a;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .auth-msg {
+        font-size: 12px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        margin-bottom: 14px;
+        display: none;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .auth-msg.error {
+        display: block;
+        background: rgba(255, 82, 82, 0.15);
+        border: 1px solid rgba(255, 82, 82, 0.4);
+        color: #ff8585;
+      }
+      .auth-msg.success {
+        display: block;
+        background: rgba(52, 232, 154, 0.15);
+        border: 1px solid rgba(52, 232, 154, 0.4);
+        color: #34e89a;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Full-window fixed canvas -->
+    <canvas id="scene"></canvas>
+
+    <!-- Top Navigation Bar -->
+    <header class="nav-bar">
+      <a href="#" class="brand">
+        <div class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+            <circle cx="12" cy="5" r="2"></circle>
+            <path d="M12 7v4"></path>
+            <line x1="8" y1="16" x2="8" y2="16"></line>
+            <line x1="16" y1="16" x2="16" y2="16"></line>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">SJBIT ROBOTICS</div>
+          <div class="brand-sub">DEPARTMENT OF ECE</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a class="nav-link" href="#overview" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Overview</a>
+        <a class="nav-link" href="#project" onclick="window.scrollTo({top: window.innerHeight * 1.5, behavior: 'smooth'}); return false;">Robotic Arm</a>
+        <a class="nav-link" href="#achievement" onclick="window.scrollTo({top: window.innerHeight * 2.9, behavior: 'smooth'}); return false;">IMPULSE 2026</a>
+        <a class="nav-link" href="#team" onclick="window.scrollTo({top: window.innerHeight * 4.2, behavior: 'smooth'}); return false;">Team</a>
+        <a class="nav-link" href="#wings" onclick="window.scrollTo({top: window.innerHeight * 5.3, behavior: 'smooth'}); return false;">Domains</a>
+        <div id="auth-nav-container">
+          <button class="auth-btn" id="open-auth-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Login / Sign Up</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Fixed bottom scroll hint -->
+    <div id="scroll-hint">scroll ↓</div>
+
+    <!-- Tall scroll host driving Three.js camera dive -->
+    <div id="scroll-host">
+      <div class="overlay-content">
+        <!-- Section 1: Hero & Real-time Wave Sea -->
+        <section class="story-section" style="min-height: 120vh;">
+          <div class="section-inner">
+            <div class="tech-badge">SJB Institute of Technology • Bengaluru</div>
+            <h1 class="glow-title">
+              SJBIT <span>ROBOTICS</span>
+            </h1>
+            <p style="max-width: 680px; font-size: 18px; line-height: 1.6; color: rgba(224, 247, 235, 0.85); margin-bottom: 24px;">
+              Pioneering next-generation robotic manipulation, autonomous cyber-physical systems, and high-performance embedded architectures. Exploring the mathematical frontier of Simplex wave dynamics and spatial telemetry.
+            </p>
+
+
+            <div style="margin-top: 32px; display: flex; gap: 16px; align-items: center;">
+              <button onclick="window.scrollTo({top: window.innerHeight * 1.5, behavior: 'smooth'})" style="background: linear-gradient(135deg, #0aff7f, #02160c); border: 1px solid #34e89a; color: #fff; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; box-shadow: 0 0 20px rgba(10, 255, 127, 0.35); font-family: 'Space Grotesk', sans-serif;">
+                Inspect Robotic Arm Project →
+              </button>
+              <button onclick="window.scrollTo({top: window.innerHeight * 3.0, behavior: 'smooth'})" style="background: rgba(52, 232, 154, 0.1); border: 1px solid rgba(52, 232, 154, 0.3); color: #34e89a; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; font-family: 'Space Grotesk', sans-serif;">
+                IMPULSE 2026 Award
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Flagship Project - 5-DOF Articulated Robotic Arm -->
+        <section class="story-section" style="min-height: 150vh;">
+          <div class="section-inner">
+            <div class="cyber-card">
+              <div class="showcase-grid">
+                <div>
+                  <div class="tech-badge" style="margin-bottom: 12px;">Flagship Hardware Project</div>
+                  <h2 style="font-size: clamp(26px, 3.5vw, 42px); font-weight: 700; color: #fff; margin: 0 0 12px; line-height: 1.15;">
+                    5-DOF Precision Articulated <span style="color:#34e89a;">Robotic Manipulator</span>
+                  </h2>
+                  <p style="font-size: 15px; line-height: 1.6; color: rgba(224, 247, 235, 0.85); margin-bottom: 16px;">
+                    Engineered from the ground up by the SJBIT Robotics research team at the Department of Electronics &amp; Communication Engineering. Designed for high-repeatability pick-and-place routines, spatial trajectory solving, and multi-axis kinematics.
+                  </p>
+
+                  <ul class="specs-list">
+                    <li>
+                      <div class="spec-bullet"></div>
+                      <div>
+                        <strong style="color:#fff;">In-House Additive Manufacturing:</strong> High-infill PLA custom printed articulated joints, base carousel, and low-deflection bicep/forearm beams.
+                      </div>
+                    </li>
+                    <li>
+                      <div class="spec-bullet"></div>
+                      <div>
+                        <strong style="color:#fff;">Integrated End-Effector:</strong> Dual-finger parallel gripper driven by direct-linkage micro servo with compliance pads for delicate payload manipulation.
+                      </div>
+                    </li>
+                    <li>
+                      <div class="spec-bullet"></div>
+                      <div>
+                        <strong style="color:#fff;">Harmonic Cable Loom:</strong> Clean low-friction wire routing channels preventing joint pinching across full 180° rotation envelopes.
+                      </div>
+                    </li>
+                    <li>
+                      <div class="spec-bullet"></div>
+                      <div>
+                        <strong style="color:#fff;">Kinematic Control:</strong> Closed-form analytical Inverse Kinematics (IK) running on 32-bit ARM Cortex embedded controller.
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;">
+                    <span class="tech-badge">5-DOF Kinematics</span>
+                    <span class="tech-badge">Custom 3D Print</span>
+                    <span class="tech-badge">Servo Actuation</span>
+                    <span class="tech-badge">ECE Robotics Lab</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="img-frame">
+                    <div class="img-corner-tag">SJBIT LAB BENCH • PROTOTYPE MK-II</div>
+                    <img src="./assets/aistudio/image_af1e236f_470a3b4e.jpg" alt="SJBIT Robotics 5-DOF Articulated Robotic Arm in the ECE laboratory" />
+                  </div>
+                  <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: rgba(52, 232, 154, 0.7); margin-top: 10px; display: flex; justify-content: space-between;">
+                    <span>STATUS: CALIBRATED &amp; OPERATIONAL</span>
+                    <span>LOCATION: LAB-304, SJBIT</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Major Achievement - IMPULSE 2026 -->
+        <section class="story-section" style="min-height: 150vh;">
+          <div class="section-inner">
+            <div class="cyber-card achievement-card">
+              <div class="showcase-grid">
+                <div>
+                  <div class="img-frame">
+                    <div class="img-corner-tag" style="border-color: #ffd700; color: #ffd700;">FELICITATION CEREMONY</div>
+                    <img src="./assets/aistudio/WhatsApp_Image_2026-11-11_at_8.08.51_PM_fc293ced.jpeg" alt="IMPULSE 2026 Organized by Department of ECE SJBIT Bangalore Award Ceremony" />
+                  </div>
+                  <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #ffe066; margin-top: 10px; display: flex; justify-content: space-between;">
+                    <span>EVENT: IMPULSE 2026</span>
+                    <span>ORG: DEPT OF ECE, SJBIT</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="tech-badge achievement-badge" style="margin-bottom: 12px;">★ Premier Club Achievement</div>
+                  <h2 style="font-size: clamp(26px, 3.5vw, 42px); font-weight: 700; color: #fff; margin: 0 0 12px; line-height: 1.15;">
+                    IMPULSE 2026
+                  </h2>
+                  <div style="font-size: 16px; color: #ffd700; font-weight: 600; margin-bottom: 16px;">
+                    Organized by Department of ECE, SJBIT Bangalore
+                  </div>
+                  <p style="font-size: 15px; line-height: 1.6; color: rgba(224, 247, 235, 0.9); margin-bottom: 16px;">
+                    The SJBIT Robotics Club was formally felicitated and awarded the prestigious Certificate of Excellence during <strong>IMPULSE 2026</strong>, hosted by the Department of Electronics &amp; Communication Engineering at SJB Institute of Technology, Bangalore.
+                  </p>
+
+                  <ul class="specs-list">
+                    <li>
+                      <div class="spec-bullet" style="background:#ffd700; box-shadow:0 0 8px #ffd700;"></div>
+                      <div>
+                        <strong style="color:#fff;">Faculty &amp; Departmental Honors:</strong> Presented in the presence of distinguished faculty mentors, senior professors, and Head of Department, recognizing exemplary innovation.
+                      </div>
+                    </li>
+                    <li>
+                      <div class="spec-bullet" style="background:#ffd700; box-shadow:0 0 8px #ffd700;"></div>
+                      <div>
+                        <strong style="color:#fff;">Technical Demonstration:</strong> Honored for groundbreaking student-led execution of autonomous robotic hardware, precision manipulators, and firmware design.
+                      </div>
+                    </li>
+                    <li>
+                      <div class="spec-bullet" style="background:#ffd700; box-shadow:0 0 8px #ffd700;"></div>
+                      <div>
+                        <strong style="color:#fff;">Multidisciplinary Impact:</strong> Showcasing seamless convergence between electrical drive systems, CAD fabrication, and real-time control algorithms.
+                      </div>
+                    </li>
+                  </ul>
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;">
+                    <span class="tech-badge achievement-badge">IMPULSE 2026 Winner</span>
+                    <span class="tech-badge achievement-badge">Department of ECE</span>
+                    <span class="tech-badge achievement-badge">SJB Institute of Technology</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 4: Club Technical Wings & Research Domains -->
+        <section class="story-section" style="min-height: 120vh;">
+          <div class="section-inner">
+            <div class="tech-badge" style="margin-bottom: 12px;">Core Technical Wings</div>
+            <h2 style="font-size: clamp(26px, 3.5vw, 42px); font-weight: 700; color: #fff; margin: 0 0 12px;">
+              Engineering Domains at <span style="color:#34e89a;">SJBIT Robotics</span>
+            </h2>
+            <p style="font-size: 15px; line-height: 1.6; color: rgba(224, 247, 235, 0.8); max-width: 720px;">
+              Hands-on incubation, peer mentorship, and competitive robotics development powered by state-of-the-art ECE lab infrastructure.
+            </p>
+
+            <div class="wings-grid">
+              <div class="wing-card">
+                <div class="wing-num">01 // KINEMATICS &amp; MECHANISMS</div>
+                <h3 class="wing-title">Manipulators &amp; Arms</h3>
+                <p class="wing-desc">
+                  Forward and inverse kinematics, 3D printed cycloidal gearboxes, servo teleoperation, and precision gripper design.
+                </p>
+              </div>
+
+              <div class="wing-card">
+                <div class="wing-num">02 // EMBEDDED ARCHITECTURE</div>
+                <h3 class="wing-title">Firmware &amp; Microcontrollers</h3>
+                <p class="wing-desc">
+                  Bare-metal C/C++, FreeRTOS on ARM Cortex-M, ESP32 dual-core IoT telemetry, CAN communication, and motor drives.
+                </p>
+              </div>
+
+              <div class="wing-card">
+                <div class="wing-num">03 // PERCEPTION &amp; EDGE AI</div>
+                <h3 class="wing-title">Computer Vision</h3>
+                <p class="wing-desc">
+                  Real-time object segmentation, OpenCV tracking, depth camera calibration, and embedded neural networks on edge accelerators.
+                </p>
+              </div>
+
+              <div class="wing-card">
+                <div class="wing-num">04 // RAPID PROTOTYPING</div>
+                <h3 class="wing-title">Additive Fabrication</h3>
+                <p class="wing-desc">
+                  SolidWorks parametric CAD modeling, FDM 3D printing with engineering filament (PLA/PETG/ABS), and rapid iterative testing.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 5: Core Team Leadership -->
+        <section class="story-section" id="team" style="min-height: 120vh;">
+          <div class="section-inner">
+            <div class="tech-badge" style="margin-bottom: 12px;">Club Leadership &amp; Developers</div>
+            <h2 style="font-size: clamp(26px, 3.5vw, 42px); font-weight: 700; color: #fff; margin: 0 0 12px;">
+              Core Team at <span style="color:#34e89a;">SJBIT Robotics</span>
+            </h2>
+            <p style="font-size: 15px; line-height: 1.6; color: rgba(224, 247, 235, 0.8); max-width: 720px; margin-bottom: 24px;">
+              The dedicated student engineers, researchers, and leads driving hardware innovation, algorithmic control, and community partnerships at the Department of Electronics &amp; Communication Engineering, SJBIT Bengaluru.
+            </p>
+
+            <div class="team-grid">
+              <!-- 1. Siddharameshwara Enkhon -->
+              <div class="team-card">
+                <div class="team-card-head">
+                  <div class="team-avatar">SE</div>
+                  <div>
+                    <div class="team-role lead">Team Head</div>
+                    <div class="team-dept">Dept of ECE • SJBIT</div>
+                  </div>
+                </div>
+                <h3 class="team-name">Siddharameshwara Enkhon</h3>
+                <p class="team-bio">
+                  Directs the strategic roadmap, lab initiatives, and multi-disciplinary project coordination across hardware and software divisions.
+                </p>
+              </div>
+
+              <!-- 2. Niranjan N -->
+              <div class="team-card">
+                <div class="team-card-head">
+                  <div class="team-avatar">NN</div>
+                  <div>
+                    <div class="team-role lead">Technical Lead</div>
+                    <div class="team-dept">Dept of ECE • SJBIT</div>
+                  </div>
+                </div>
+                <h3 class="team-name">Niranjan N</h3>
+                <p class="team-bio">
+                  Leads technical architecture, robotic arm inverse kinematics, sensor interfacing, and embedded microcontroller firmware execution.
+                </p>
+              </div>
+
+              <!-- 3. Thoshith YA -->
+              <div class="team-card">
+                <div class="team-card-head">
+                  <div class="team-avatar">TY</div>
+                  <div>
+                    <div class="team-role lead">Managerial Lead</div>
+                    <div class="team-dept">Dept of ECE • SJBIT</div>
+                  </div>
+                </div>
+                <h3 class="team-name">Thoshith YA</h3>
+                <p class="team-bio">
+                  Oversees operational logistics, equipment procurement, project sprint schedules, and club competition readiness for events like IMPULSE.
+                </p>
+              </div>
+
+              <!-- 4. Pavan Sparsh -->
+              <div class="team-card">
+                <div class="team-card-head">
+                  <div class="team-avatar">PS</div>
+                  <div>
+                    <div class="team-role lead">PR Head</div>
+                    <div class="team-dept">Dept of ECE • SJBIT</div>
+                  </div>
+                </div>
+                <h3 class="team-name">Pavan Sparsh</h3>
+                <p class="team-bio">
+                  Heads external relations, departmental collaborations, industry sponsorship outreach, and public relations representation.
+                </p>
+              </div>
+
+              <!-- 5. Nihal.N -->
+              <div class="team-card">
+                <div class="team-card-head">
+                  <div class="team-avatar">NN</div>
+                  <div>
+                    <div class="team-role">Technical Team</div>
+                    <div class="team-dept">Dept of ECE • SJBIT</div>
+                  </div>
+                </div>
+                <h3 class="team-name">Nihal.N</h3>
+                <p class="team-bio">
+                  Focuses on 3D CAD fabrication, manipulator joint assembly, servo harness testing, and sensor-driven actuation routines.
+                </p>
+              </div>
+
+              <!-- 6. Vaibhav Udupa -->
+              <div class="team-card">
+                <div class="team-card-head">
+                  <div class="team-avatar">VU</div>
+                  <div>
+                    <div class="team-role">PR Team</div>
+                    <div class="team-dept">Dept of ECE • SJBIT</div>
+                  </div>
+                </div>
+                <h3 class="team-name">Vaibhav Udupa</h3>
+                <p class="team-bio">
+                  Drives media communications, technical documentation, event coverage, and digital community engagement for club activities.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 6: Department & Campus Footer -->
+        <section class="story-section" style="min-height: 80vh;">
+          <div class="section-inner">
+            <div class="cyber-card" style="text-align: center; padding: 48px 32px;">
+              <div class="tech-badge" style="margin-bottom: 16px;">Get Involved</div>
+              <h2 style="font-size: clamp(26px, 4vw, 44px); font-weight: 700; color: #fff; margin: 0 0 16px;">
+                Shape the Future with <span style="color:#34e89a;">SJBIT Robotics</span>
+              </h2>
+              <p style="font-size: 15px; line-height: 1.7; color: rgba(224, 247, 235, 0.85); max-width: 640px; margin: 0 auto 20px;">
+                Department of Electronics &amp; Communication Engineering<br />
+                SJB Institute of Technology, BGS Health &amp; Education City, Dr. Vishnuvardhan Road, Kengeri, Bengaluru - 560060, Karnataka, India.
+              </p>
+
+              <!-- Official Contact Box -->
+              <div style="margin: 20px auto 28px; max-width: 540px; background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(52, 232, 154, 0.3); border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; text-align: left; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                <div>
+                  <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #34e89a; letter-spacing: 0.1em; text-transform: uppercase;">
+                    Official Club Help Desk &amp; Inquiries
+                  </div>
+                  <div style="font-size: 18px; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; margin-top: 4px; letter-spacing: 0.05em;">
+                    +91 87921 73811
+                  </div>
+                  <div style="font-size: 12px; color: rgba(224, 247, 235, 0.65); margin-top: 2px;">
+                    Department of ECE, SJB Institute of Technology
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <a href="tel:+918792173811" style="background: rgba(52, 232, 154, 0.15); border: 1px solid #34e89a; color: #34e89a; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                    Call
+                  </a>
+                  <a href="https://wa.me/918792173811" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #0aff7f, #02160c); border: 1px solid #34e89a; color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="background: rgba(52, 232, 154, 0.15); border: 1px solid #34e89a; color: #34e89a; padding: 10px 22px; border-radius: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer;">
+                  ↑ Return to Surface (Top)
+                </button>
+              </div>
+
+              <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(52, 232, 154, 0.15); font-size: 12px; font-family: 'JetBrains Mono', monospace; color: rgba(52, 232, 154, 0.6); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <span>SJBIT ROBOTICS CLUB &copy; 2026</span>
+                <span>FLOW WAVE ENGINE • THREE.JS r0.143.0</span>
+                <span>ECE DEPARTMENT, SJBIT BANGALORE</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Cyber Auth Modal (Login / Sign Up) -->
+    <div class="modal-overlay" id="auth-modal-overlay">
+      <div class="auth-modal" role="dialog" aria-modal="true">
+        <button class="modal-close" id="modal-close-btn" aria-label="Close modal">✕</button>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+          <div class="brand-icon" style="width: 28px; height: 28px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+              <circle cx="12" cy="5" r="2"></circle>
+              <path d="M12 7v4"></path>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight: 700; font-size: 16px; color: #fff;">SJBIT ROBOTICS</div>
+            <div style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #34e89a;">MEMBER PORTAL</div>
+          </div>
+        </div>
+
+        <div class="auth-tabs" id="auth-tabs-bar">
+          <button class="auth-tab active" id="tab-login-btn">Sign In</button>
+          <button class="auth-tab" id="tab-signup-btn">Create Account</button>
+        </div>
+
+        <div id="auth-msg-box" class="auth-msg"></div>
+
+        <!-- Login Form -->
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label">EMAIL ADDRESS</label>
+            <input type="email" id="login-email" class="form-input" placeholder="name@sjbit.edu.in" required autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span>PASSWORD</span>
+            </label>
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
+          </div>
+
+          <button type="submit" class="form-submit-btn">
+            Sign In to Portal →
+          </button>
+
+          <div class="form-toggle-link">
+            Don't have an account? <a id="switch-to-signup">Create one now</a>
+          </div>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signup-form" style="display: none;">
+          <div class="form-group">
+            <label class="form-label">FULL NAME</label>
+            <input type="text" id="signup-name" class="form-input" placeholder="Student / Researcher Name" required autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">EMAIL ADDRESS</label>
+            <input type="email" id="signup-email" class="form-input" placeholder="name@sjbit.edu.in" required autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">PASSWORD</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="Min 6 characters" required autocomplete="new-password" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span>CONTACT NUMBER</span>
+              <span style="color: #34e89a;">+91 87921 73811</span>
+            </label>
+            <input type="tel" id="signup-contact" class="form-input" value="+91 87921 73811" placeholder="+91 87921 73811" required autocomplete="tel" />
+          </div>
+
+          <button type="submit" class="form-submit-btn">
+            Register Account →
+          </button>
+
+          <div class="form-toggle-link">
+            Already have an account? <a id="switch-to-login">Sign in</a>
+          </div>
+        </form>
+
+        <!-- Profile Details View (When Logged In) -->
+        <div id="profile-view" style="display: none;">
+          <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(52, 232, 154, 0.25); border-radius: 12px; padding: 18px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+              <div id="prof-avatar" class="team-avatar" style="width: 44px; height: 44px; margin-bottom: 0;">SJ</div>
+              <div>
+                <div id="prof-name" style="font-weight: 700; color: #fff; font-size: 16px;">Member</div>
+                <div id="prof-role" class="tech-badge" style="font-size: 9px; padding: 2px 8px; margin-top: 3px;">Verified Member</div>
+              </div>
+            </div>
+
+            <div style="font-size: 12px; font-family: 'JetBrains Mono', monospace; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: rgba(52, 232, 154, 0.7);">EMAIL:</span>
+                <span id="prof-email" style="color: #fff;">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: rgba(52, 232, 154, 0.7);">CONTACT:</span>
+                <span id="prof-contact" style="color: #34e89a;">+91 87921 73811</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: rgba(52, 232, 154, 0.7);">CLUB:</span>
+                <span style="color: #fff;">SJBIT Robotics (ECE)</span>
+              </div>
+            </div>
+          </div>
+
+          <button id="modal-logout-btn" style="width: 100%; background: rgba(255, 82, 82, 0.15); border: 1px solid #ff5252; color: #ff8585; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Space Grotesk', sans-serif;">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- The complete Three.js r0.143.0 Scene Script -->
+    <script type="module">
+      import * as THREE from 'three';
+      import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+      import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+      import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+      import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+      import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js';
+      import { CopyShader } from 'three/addons/shaders/CopyShader.js';
+
+      // ==========================================
+      // Fixed parameters (bake these in)
+      // ==========================================
+      const bgColor       = '#02160c';   // FinalPass background tint
+      const flameColor    = '#0aff7f';   // corner-flame A
+      const flameColor2   = '#aef0c0';   // corner-flame B
+      let   flameAmt      = 0.2;         // corner-flame intensity
+      const atmoColor     = '#7affbf';   // ambient motes color
+      const atmoCount     = 300;         // mote count
+      const atmoSize      = 24;          // mote base size
+      const atmoSpeed     = 1.0;         // mote warp speed
+      const colorLow      = '#02160c';   // points low color
+      const colorHigh     = '#34e89a';   // points high color
+      const opacity       = 0.26;        // point opacity
+      let   pointSize     = 5.5;         // point base size
+      const brightness    = 0.45;        // point color multiplier
+      let   waveHeight    = 3;           // base swell amplitude
+      let   flow          = 1;           // noise scroll speed
+      const tilt          = 0;           // sheet X rotation (negated)
+      const scale         = 0.275;       // shrinks the sheet to frame
+      const scrollRise    = 1.0;         // swell amplitude growth on scroll
+      const camStartY     = 7,  camStartZ = 16;   // scroll 0 camera
+      const camEndY       = 0.8, camEndZ  = -2;   // scroll 1 camera
+      const lookStartZ    = 2,  lookEndZ  = -16;  // look-target pan
+      const parallax      = 1.2;
+      let   pointerRadius   = 7.0;
+      const pointerStrength = 0.9;
+
+      // ==========================================
+      // Helpers
+      // ==========================================
+      const Lerp = (a, b, t) => a + (b - a) * t;
+      const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+      function hexToVec3(hex) {
+        const n = parseInt(hex.slice(1), 16);
+        return new THREE.Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
+      }
+
+      // ==========================================
+      // Page & Boilerplate Setup
+      // ==========================================
+      const canvas = document.getElementById('scene');
+      const renderer = new THREE.WebGL1Renderer({ canvas, antialias: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.VSMShadowMap;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000);
+      scene.fog = new THREE.Fog(0x000000, 0, 15);
+
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 400);
+      camera.position.set(0, 7, 16);
+
+      const LAYERS = { NONE: 0, TORUS_SCENE: 1, BLOOM_SCENE: 2, ENTIRE_SCENE: 3 };
+      camera.layers.enable(LAYERS.TORUS_SCENE);
+      camera.layers.enable(LAYERS.BLOOM_SCENE);
+      camera.layers.enable(LAYERS.ENTIRE_SCENE);
+      scene.add(camera);
+
+      // ==========================================
+      // Postprocessing Setup
+      // ==========================================
+      const renderPass = new RenderPass(scene, camera);
+
+      // torusComposer (renderToScreen = false)
+      const torusComposer = new EffectComposer(renderer);
+      torusComposer.renderToScreen = false;
+      torusComposer.addPass(renderPass);
+      torusComposer.addPass(new ShaderPass(GammaCorrectionShader));
+      torusComposer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.22, 0.2, 0));
+      torusComposer.addPass(new ShaderPass(CopyShader));
+
+      // bloomComposer (renderToScreen = false)
+      const bloomComposer = new EffectComposer(renderer);
+      bloomComposer.renderToScreen = false;
+      bloomComposer.addPass(renderPass);
+      bloomComposer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.4, 0.55, 0));
+      bloomComposer.addPass(new ShaderPass(GammaCorrectionShader));
+
+      // FinalPass composite shader definition
+      const FinalShader = {
+        uniforms: {
+          iTime: { value: 0 },
+          tDiffuse: { value: null },
+          torusTexture: { value: torusComposer.renderTarget1.texture },
+          bloomTexture: { value: bloomComposer.renderTarget1.texture },
+          haloTexture: { value: new THREE.DataTexture(new Uint8Array([0, 0, 0, 0]), 1, 1) },
+          uBg: { value: hexToVec3(bgColor) },
+          uFlameA: { value: hexToVec3(flameColor) },
+          uFlameB: { value: hexToVec3(flameColor2) },
+          uFlameAmt: { value: flameAmt },
+        },
+        vertexShader: `
+varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }
+        `,
+        fragmentShader: `
+uniform float iTime; uniform sampler2D tDiffuse; uniform sampler2D bloomTexture; uniform sampler2D torusTexture; uniform sampler2D haloTexture;
+uniform vec3 uBg; uniform vec3 uFlameA; uniform vec3 uFlameB; uniform float uFlameAmt;
+varying vec2 vUv;
+vec3 warp3d(vec3 pos, float t){ float curv=.8,a=1.9,b=0.7; pos*=2.;
+  pos.x+=curv*sin(t+a*pos.y)+t*b; pos.y+=curv*cos(t+a*pos.x);
+  pos.y+=curv*sin(t+a*pos.z)+t*b; pos.z+=curv*cos(t+a*pos.y);
+  pos.z+=curv*sin(t+a*pos.x)+t*b; pos.x+=curv*cos(t+a*pos.z);
+  return 0.5+0.5*cos(pos.xyz+vec3(1,2,4)); }
+void main(){
+  vec2 uv = 2.*vUv - 1.;
+  vec3 w = pow(warp3d(vec3(uv.x, sin(uv.y), uv.y), iTime*1.5), vec3(1.5));
+  vec3 flame = 1.5*uFlameA*w.x; flame*=w.y; flame += uFlameB*w.z;
+  flame *= smoothstep(0.25, 1., abs(uv.y));
+  float md = smoothstep(-0.7, 1., -uv.y*uv.x); flame *= md*md;
+  vec3 bg = uBg * (1.0 - 0.4 * length(uv));
+  vec3 halo = texture2D(haloTexture, vUv).xyz;
+  gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(bloomTexture, vUv).xyz + texture2D(torusTexture, vUv).xyz + texture2D(tDiffuse, vUv).xyz + halo, 1.);
+}
+        `
+      };
+
+      const finalPass = new ShaderPass(FinalShader);
+      finalPass.uniforms.haloTexture.value.needsUpdate = true;
+      finalPass.uniforms.bloomTexture.value = bloomComposer.renderTarget1.texture;
+      finalPass.uniforms.torusTexture.value = torusComposer.renderTarget1.texture;
+
+      const finalComposer = new EffectComposer(renderer);
+      finalComposer.addPass(renderPass);
+      finalComposer.addPass(finalPass);
+
+      // ==========================================
+      // Geometry & Points Material
+      // ==========================================
+      const geometry = new THREE.SphereGeometry(4.2, 200, 600);
+
+      const SNOISE = `
+vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+float snoise(vec3 v){
+  const vec2 C = vec2(1.0/6.0, 1.0/3.0); const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+  vec3 i = floor(v + dot(v, C.yyy)); vec3 x0 = v - i + dot(i, C.xxx);
+  vec3 g = step(x0.yzx, x0.xyz); vec3 l = 1.0 - g;
+  vec3 i1 = min(g.xyz, l.zxy); vec3 i2 = max(g.xyz, l.zxy);
+  vec3 x1 = x0 - i1 + 1.0 * C.xxx; vec3 x2 = x0 - i2 + 2.0 * C.xxx; vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+  i = mod(i, 289.0);
+  vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+  float n_ = 1.0/7.0; vec3 ns = n_ * D.wyz - D.xzx;
+  vec4 j = p - 49.0 * floor(p * ns.z *ns.z);
+  vec4 x_ = floor(j * ns.z); vec4 y_ = floor(j - 7.0 * x_);
+  vec4 x = x_ *ns.x + ns.yyyy; vec4 y = y_ *ns.x + ns.yyyy; vec4 h = 1.0 - abs(x) - abs(y);
+  vec4 b0 = vec4(x.xy, y.xy); vec4 b1 = vec4(x.zw, y.zw);
+  vec4 s0 = floor(b0)*2.0 + 1.0; vec4 s1 = floor(b1)*2.0 + 1.0; vec4 sh = -step(h, vec4(0.0));
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy; vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+  vec3 p0 = vec3(a0.xy,h.x); vec3 p1 = vec3(a0.zw,h.y); vec3 p2 = vec3(a1.xy,h.z); vec3 p3 = vec3(a1.zw,h.w);
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+  vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0); m = m * m;
+  return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+}
+      `;
+
+      const pointsMaterial = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        uniforms: {
+          uTime: { value: 0 },
+          uStream: { value: 0 },
+          uAppear: { value: 0 },
+          uColLow: { value: hexToVec3(colorLow) },
+          uColHigh: { value: hexToVec3(colorHigh) },
+          uOpacity: { value: opacity },
+          uSize: { value: pointSize },
+          uBrightness: { value: brightness },
+          uWaveHeight: { value: waveHeight },
+          uFlow: { value: flow },
+          uScale: { value: scale },
+          uCursor: { value: new THREE.Vector3() },
+          uRepelRadius: { value: pointerRadius },
+          uRepelStrength: { value: pointerStrength },
+          uActivity: { value: 0 }
+        },
+        vertexShader: `
+uniform float uTime; uniform float uStream; uniform float uSize; uniform float uWaveHeight; uniform float uFlow; uniform float uScale;
+uniform vec3 uColLow; uniform vec3 uColHigh;
+uniform vec3 uCursor; uniform float uRepelRadius; uniform float uRepelStrength; uniform float uActivity;
+varying float vFade; varying vec3 vColor;
+${SNOISE}
+void main() {
+  vec3 wp = vec3(position.x * 13.0, 0.0, position.z * 25.0);
+  wp.x += position.y * 6.0;
+  // uStream slides the sampled hills toward the camera (forward flight).
+  float zc = wp.z + uStream;
+  float wn = snoise(vec3(wp.x * 0.08, zc * 0.08, uTime * 0.15 * uFlow)) * 2.0;
+  wn += snoise(vec3(wp.x * 0.16, zc * 0.16, uTime * 0.3 * uFlow)) * 0.8;
+  wp.y += wn * uWaveHeight;
+
+  vec3 finalPos = wp * uScale;
+  vec4 modelPosition = modelMatrix * vec4(finalPos, 1.0);
+  vec3 toP = modelPosition.xyz - uCursor;
+  float cd = length(toP);
+  float fall = smoothstep(uRepelRadius, 0.0, cd);
+  modelPosition.xyz += normalize(toP + vec3(0.0001)) * fall * uRepelStrength * uActivity;
+  vec4 mvPosition = viewMatrix * modelPosition;
+
+  float colMix = smoothstep(-3.0, 3.0, position.y + position.x * 0.5);
+  vColor = mix(uColLow, uColHigh, clamp(colMix, 0.0, 1.0));
+  vFade = 1.0;
+
+  gl_PointSize = uSize * (10.0 / -mvPosition.z);
+  gl_PointSize = max(gl_PointSize, 1.5);
+  gl_Position = projectionMatrix * mvPosition;
+}
+        `,
+        fragmentShader: `
+uniform float uOpacity; uniform float uBrightness; uniform float uAppear;
+varying float vFade; varying vec3 vColor;
+void main() {
+  vec2 xy = gl_PointCoord - 0.5;
+  float ll = length(xy);
+  if (ll > 0.5) discard;
+  float a = smoothstep(0.5, 0.1, ll);
+  gl_FragColor = vec4(vColor * uBrightness, vFade * a * uOpacity * uAppear);
+}
+        `
+      });
+
+      const points = new THREE.Points(geometry, pointsMaterial);
+      points.frustumCulled = false;
+      points.layers.enable(LAYERS.ENTIRE_SCENE);
+
+      const group = new THREE.Group();
+      group.add(points);
+      scene.add(group);
+
+      // ==========================================
+      // Ambient Motes (Camera-attached particles)
+      // ==========================================
+      let atmoMat, atmoPts;
+      (() => {
+        const N = Math.round(atmoCount);
+        const pos = new Float32Array(N * 3);
+        const sizes = new Float32Array(N);
+        const seeds = new Float32Array(N);
+
+        for (let i = 0; i < N; i++) {
+          pos[i * 3]     = 2 * Math.random() - 1;
+          pos[i * 3 + 1] = 2 * Math.random() - 1;
+          pos[i * 3 + 2] = 2 * Math.random() - 1;
+          sizes[i] = atmoSize * (0.4 + Math.random());
+          seeds[i] = Math.random();
+        }
+
+        const atmoGeo = new THREE.BufferGeometry();
+        atmoGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        atmoGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+        atmoGeo.setAttribute('seed', new THREE.BufferAttribute(seeds, 1));
+
+        atmoMat = new THREE.ShaderMaterial({
+          transparent: true,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          depthTest: false,
+          uniforms: {
+            uTime: { value: 0 },
+            uColor: { value: hexToVec3(atmoColor) },
+            uRes: { value: new THREE.Vector2(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio) }
+          },
+          vertexShader: `
+attribute float size; attribute float seed; uniform float uTime; uniform vec2 uRes;
+varying float vA;
+vec3 warp(vec3 p, float t){ float c=0.9,a=1.9,b=0.02,s=0.05; p*=2.;
+  p.x+=c*sin(s*t+a*p.y)+t*b; p.y+=c*cos(s*t+a*p.x); p.y+=c*sin(s*t+a*p.z)+t*b;
+  p.z+=c*cos(s*t+a*p.y); p.z+=c*sin(s*t+a*p.x)+t*b; p.x+=c*cos(s*t+a*p.z);
+  return cos(p+vec3(1,2,4)); }
+void main(){
+  vec3 v = position*4.0 + warp(position, uTime)*1.2;
+  vec4 mv = modelViewMatrix * vec4(v, 1.0);
+  float r = length(v); float farF = 1.0 - smoothstep(5.0, 6.5, r); float nearF = smoothstep(0.0, 0.5, -mv.z);
+  vA = farF * nearF;
+  gl_PointSize = size * uRes.y / 900.0 / -mv.z; gl_PointSize = max(gl_PointSize, 1.0);
+  gl_Position = projectionMatrix * mv;
+}
+          `,
+          fragmentShader: `
+uniform vec3 uColor; varying float vA;
+void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) discard;
+  float tex = smoothstep(0.5, 0.0, l); gl_FragColor = vec4(uColor * tex, tex * vA * 0.6); }
+          `
+        });
+
+        atmoPts = new THREE.Points(atmoGeo, atmoMat);
+        atmoPts.frustumCulled = false;
+        atmoPts.layers.enable(LAYERS.ENTIRE_SCENE);
+        scene.add(atmoPts);
+
+        atmoPts.onBeforeRender = () => {
+          const t = performance.now() / 1000;
+          atmoMat.uniforms.uTime.value = t * atmoSpeed * 8.0;
+          atmoPts.position.copy(camera.position);
+          finalPass.uniforms.iTime.value = t;
+        };
+      })();
+
+      // ==========================================
+      // Animation & Interaction (Double Damped Scroll + Pointer)
+      // ==========================================
+      let scrollTarget = 0, scrollSmooth = 0, scrollCurrent = 0;
+      const scrollHint = document.getElementById('scroll-hint');
+
+      function onScroll() {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        scrollTarget = max > 0 ? clamp(window.scrollY / max, 0, 1) : 0;
+        if (scrollHint) {
+          scrollHint.style.opacity = window.scrollY > 80 ? '0' : '0.6';
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      const mouseTarget = { x: 0, y: 0 };
+      const mouse = { x: 0, y: 0 };
+      const POINTER = {
+        world: new THREE.Vector3(),
+        activity: 0,
+        active: false,
+        lastMove: performance.now()
+      };
+
+      window.addEventListener('mousemove', (e) => {
+        mouseTarget.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseTarget.y = -((e.clientY / window.innerHeight) * 2 - 1);
+        POINTER.active = true;
+        POINTER.lastMove = performance.now();
+      }, { passive: true });
+
+      window.addEventListener('mouseout', () => {
+        POINTER.active = false;
+      });
+
+      const _ndc = new THREE.Vector3(), _dir = new THREE.Vector3(), _tgt = new THREE.Vector3();
+      function updatePointerWorld() {
+        _tgt.set(0, 0, 0);
+        if (POINTER.active) {
+          _ndc.set(mouse.x, mouse.y, 0.5).unproject(camera);
+          _dir.copy(_ndc).sub(camera.position).normalize();
+          const dn = _dir.z;
+          if (Math.abs(dn) > 1e-4) {
+            const tt = -camera.position.z / dn;
+            if (tt > 0 && Number.isFinite(tt)) _tgt.copy(camera.position).addScaledVector(_dir, tt);
+          }
+        }
+        POINTER.world.lerp(_tgt, 0.12);
+        const idle = (performance.now() - POINTER.lastMove) / 1000;
+        POINTER.activity += (((POINTER.active && idle < 3) ? 1 : 0) - POINTER.activity) * 0.06;
+      }
+
+      const sceneObj = {
+        stream: 0,
+        appearStart: performance.now(),
+        t0: performance.now() / 1000,
+        render(scroll, m) {
+          const t = performance.now() / 1000;
+          const dt = Math.min(0.05, t - this.t0);
+          this.t0 = t;
+          pointsMaterial.uniforms.uTime.value = t;
+
+          // Stream the hills toward us at a constant rate; grow the swell with scroll.
+          this.stream += dt * (flow * 2.0) * 4.0;
+          pointsMaterial.uniforms.uStream.value = this.stream;
+          pointsMaterial.uniforms.uWaveHeight.value = waveHeight * (1 + scroll * scrollRise);
+
+          // Camera fly-path: smoothstep over the first 35% of scroll.
+          const ea = Math.min(scroll / 0.35, 1.0);
+          const e = ea * ea * (3 - 2 * ea);
+          const camY = Lerp(camStartY, camEndY, e);
+          const camZ = Lerp(camStartZ, camEndZ, e);
+          camera.position.set(m.x * parallax, camY + m.y * parallax * 0.3, camZ);
+          camera.lookAt(m.x * parallax * 0.5, Lerp(0.0, 0.6, e), Lerp(lookStartZ, lookEndZ, e));
+          group.rotation.x = -tilt;
+          group.rotation.y = 0;
+          updatePointerWorld();
+
+          pointsMaterial.uniforms.uCursor.value.copy(POINTER.world);
+          pointsMaterial.uniforms.uActivity.value = POINTER.activity;
+          const elapsed = (performance.now() - this.appearStart) / 1000;
+          pointsMaterial.uniforms.uAppear.value = Math.max(0, Math.min(1, (elapsed - 0.2) / 1.4));
+        }
+      };
+
+      // ==========================================
+      // Resize Handler
+      // ==========================================
+      function onResize() {
+        const w = window.innerWidth, h = window.innerHeight;
+        const dpr = window.devicePixelRatio;
+        renderer.setPixelRatio(dpr);
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+
+        torusComposer.setPixelRatio(dpr);
+        torusComposer.setSize(w, h);
+        bloomComposer.setPixelRatio(dpr);
+        bloomComposer.setSize(w, h);
+        finalComposer.setPixelRatio(dpr);
+        finalComposer.setSize(w, h);
+
+        if (atmoMat) {
+          atmoMat.uniforms.uRes.value.set(w * dpr, h * dpr);
+        }
+
+        onScroll();
+      }
+      window.addEventListener('resize', onResize);
+      onResize();
+
+      // ==========================================
+      // Render Loop
+      // ==========================================
+      function animate() {
+        requestAnimationFrame(animate);
+        scrollSmooth  = Lerp(scrollSmooth, scrollTarget, 0.10);
+        scrollCurrent = Lerp(scrollCurrent, scrollSmooth, 0.06);
+        mouse.x = Lerp(mouse.x, mouseTarget.x, 0.06);
+        mouse.y = Lerp(mouse.y, mouseTarget.y, 0.06);
+
+        sceneObj.render(scrollCurrent, mouse);
+
+        camera.layers.set(LAYERS.TORUS_SCENE);  torusComposer.render();
+        camera.layers.set(LAYERS.BLOOM_SCENE);  bloomComposer.render();
+        camera.layers.set(LAYERS.ENTIRE_SCENE); finalComposer.render();
+      }
+      animate();
+
+      // ==========================================
+      // Authentication & Member Portal System
+      // ==========================================
+      const modalOverlay = document.getElementById('auth-modal-overlay');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+      const tabLoginBtn = document.getElementById('tab-login-btn');
+      const tabSignupBtn = document.getElementById('tab-signup-btn');
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      const profileView = document.getElementById('profile-view');
+      const authTabsBar = document.getElementById('auth-tabs-bar');
+      const authMsgBox = document.getElementById('auth-msg-box');
+      const authNavContainer = document.getElementById('auth-nav-container');
+
+      // Users store initialization
+      const USERS_KEY = 'sjbit_robotics_members_v1';
+      const SESSION_KEY = 'sjbit_robotics_active_session_v1';
+
+      function getStoredUsers() {
+        try {
+          const raw = localStorage.getItem(USERS_KEY);
+          return raw ? JSON.parse(raw) : [
+            {
+              name: 'Nihal N',
+              email: 'nihal@sjbit.edu.in',
+              password: 'password123',
+              contact: '+91 87921 73811',
+              role: 'Technical Team'
+            }
+          ];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveStoredUsers(users) {
+        try {
+          localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function getActiveSession() {
+        try {
+          const raw = localStorage.getItem(SESSION_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch {
+          return null;
+        }
+      }
+
+      function setActiveSession(user) {
+        try {
+          if (user) {
+            localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+          } else {
+            localStorage.removeItem(SESSION_KEY);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+        updateNavState();
+      }
+
+      function showMsg(text, type = 'error') {
+        authMsgBox.textContent = text;
+        authMsgBox.className = `auth-msg ${type}`;
+        authMsgBox.style.display = 'block';
+      }
+
+      function clearMsg() {
+        authMsgBox.textContent = '';
+        authMsgBox.className = 'auth-msg';
+        authMsgBox.style.display = 'none';
+      }
+
+      function setAuthMode(mode) {
+        clearMsg();
+        const session = getActiveSession();
+
+        if (session) {
+          authTabsBar.style.display = 'none';
+          loginForm.style.display = 'none';
+          signupForm.style.display = 'none';
+          profileView.style.display = 'block';
+
+          document.getElementById('prof-name').textContent = session.name || 'Member';
+          document.getElementById('prof-email').textContent = session.email || '-';
+          document.getElementById('prof-contact').textContent = session.contact || '+91 87921 73811';
+          document.getElementById('prof-role').textContent = session.role || 'Verified Member';
+          const initials = (session.name || 'MB').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          document.getElementById('prof-avatar').textContent = initials;
+          return;
+        }
+
+        authTabsBar.style.display = 'flex';
+        profileView.style.display = 'none';
+
+        if (mode === 'signup') {
+          tabSignupBtn.classList.add('active');
+          tabLoginBtn.classList.remove('active');
+          signupForm.style.display = 'block';
+          loginForm.style.display = 'none';
+          setTimeout(() => document.getElementById('signup-name')?.focus(), 50);
+        } else {
+          tabLoginBtn.classList.add('active');
+          tabSignupBtn.classList.remove('active');
+          loginForm.style.display = 'block';
+          signupForm.style.display = 'none';
+          setTimeout(() => document.getElementById('login-email')?.focus(), 50);
+        }
+      }
+
+      function openModal(mode = 'login') {
+        setAuthMode(mode);
+        modalOverlay.classList.add('active');
+      }
+
+      function closeModal() {
+        modalOverlay.classList.remove('active');
+        clearMsg();
+      }
+
+      // Security Helper: Escape HTML to prevent DOM XSS vulnerabilities
+      function escapeHTML(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, (m) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        })[m]);
+      }
+
+      // Security Helper: Hash passwords using Web Crypto SHA-256
+      async function hashPassword(pwd) {
+        try {
+          const enc = new TextEncoder();
+          const data = enc.encode('sjbit_salt_v2026:' + pwd);
+          const buf = await crypto.subtle.digest('SHA-256', data);
+          return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch {
+          return pwd;
+        }
+      }
+
+      function updateNavState() {
+        const session = getActiveSession();
+        if (!authNavContainer) return;
+
+        if (session) {
+          const initials = (session.name || 'MB').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          const displayName = (session.name || session.email).split(' ')[0];
+          const safeInitials = escapeHTML(initials);
+          const safeDisplayName = escapeHTML(displayName);
+          authNavContainer.innerHTML = `
+            <div class="user-pill" id="nav-user-pill" title="View profile and account details">
+              <span class="user-pill-avatar">${safeInitials}</span>
+              <span>${safeDisplayName}</span>
+              <button class="logout-btn" id="nav-logout-btn" title="Sign Out">✕</button>
+            </div>
+          `;
+
+          document.getElementById('nav-user-pill').addEventListener('click', (e) => {
+            if (e.target.id === 'nav-logout-btn') return;
+            openModal();
+          });
+
+          document.getElementById('nav-logout-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            setActiveSession(null);
+            closeModal();
+          });
+        } else {
+          authNavContainer.innerHTML = `
+            <button class="auth-btn" id="open-auth-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Login / Sign Up</span>
+            </button>
+          `;
+          document.getElementById('open-auth-btn').addEventListener('click', () => openModal('login'));
+        }
+      }
+
+      // Event listeners for tabs & switches
+      tabLoginBtn.addEventListener('click', () => setAuthMode('login'));
+      tabSignupBtn.addEventListener('click', () => setAuthMode('signup'));
+
+      document.getElementById('switch-to-signup')?.addEventListener('click', () => setAuthMode('signup'));
+      document.getElementById('switch-to-login')?.addEventListener('click', () => setAuthMode('login'));
+
+      modalCloseBtn.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      // Login Form submission
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMsg();
+        const email = document.getElementById('login-email').value.trim().toLowerCase();
+        const password = document.getElementById('login-password').value;
+
+        const users = getStoredUsers();
+        const user = users.find(u => u.email.toLowerCase() === email);
+
+        if (!user) {
+          showMsg('No account found with this email. Please click "Create Account" above to sign up.', 'error');
+          return;
+        }
+
+        const hashed = await hashPassword(password);
+        if (user.password !== password && user.password !== hashed) {
+          showMsg('Incorrect password. Please verify and try again.', 'error');
+          return;
+        }
+
+        setActiveSession(user);
+
+        // GA4 Conversion Event: Login
+        if (typeof gtag === 'function') {
+          gtag('event', 'login', {
+            method: 'SJBIT Robotics Portal'
+          });
+        }
+
+        showMsg(`Welcome back, ${escapeHTML(user.name)}! Access granted.`, 'success');
+        setTimeout(closeModal, 1100);
+      });
+
+      // Sign Up Form submission
+      signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearMsg();
+        const name = document.getElementById('signup-name').value.trim();
+        const email = document.getElementById('signup-email').value.trim().toLowerCase();
+        const password = document.getElementById('signup-password').value;
+        const contact = document.getElementById('signup-contact').value.trim() || '+91 87921 73811';
+
+        if (password.length < 6) {
+          showMsg('Password must be at least 6 characters in length.', 'error');
+          return;
+        }
+
+        const users = getStoredUsers();
+        if (users.some(u => u.email.toLowerCase() === email)) {
+          showMsg('An account with this email already exists. Please sign in instead.', 'error');
+          return;
+        }
+
+        const hashedPassword = await hashPassword(password);
+        const newUser = {
+          name,
+          email,
+          password: hashedPassword,
+          contact,
+          role: 'Verified Member',
+          registeredAt: new Date().toISOString()
+        };
+
+        users.push(newUser);
+        saveStoredUsers(users);
+        setActiveSession(newUser);
+
+        // GA4 Conversion Event: Sign Up & Lead Generation
+        if (typeof gtag === 'function') {
+          gtag('event', 'sign_up', {
+            method: 'Web Form',
+            role: newUser.role
+          });
+          gtag('event', 'club_signup_completed', {
+            event_category: 'Engagement',
+            event_label: 'New Member Registered'
+          });
+        }
+
+        showMsg(`Account successfully registered! Welcome to SJBIT Robotics, ${escapeHTML(name)}.`, 'success');
+        setTimeout(closeModal, 1100);
+      });
+
+      // Modal Logout button
+      document.getElementById('modal-logout-btn')?.addEventListener('click', () => {
+        setActiveSession(null);
+        closeModal();
+      });
+
+      // Conversion Tracking: Track CTA button & anchor navigation clicks
+      document.querySelectorAll('a[href^="#"], .nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          const text = link.textContent.trim();
+          if (typeof gtag === 'function' && text) {
+            gtag('event', 'cta_click', {
+              event_category: 'Navigation',
+              event_label: text
+            });
+          }
+        });
+      });
+
+      // Initialize Nav Auth state
+      updateNavState();
+    </script>
+  </body>
+</html>

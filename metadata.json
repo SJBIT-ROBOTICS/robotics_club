@@ -1,0 +1,6 @@
+{
+  "name": "SJBIT Robotics - Flow Wave",
+  "description": "Official portal of SJBIT Robotics Club featuring the interactive Three.js Flow Wave particle sea simulation, robotic arm project showcase, and IMPULSE 2026 ECE Department achievement.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
