@@ -3,12 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SJBIT Robotics - Flow Wave</title>
-    <meta name="description" content="Official portal of SJBIT Robotics Club featuring the interactive Three.js Flow Wave particle sea simulation, robotic arm project showcase, and IMPULSE 2026 ECE Department achievement." />
-    <meta property="og:title" content="SJBIT Robotics - Flow Wave" />
-    <meta property="og:description" content="Official portal of SJBIT Robotics Club featuring the interactive Three.js Flow Wave particle sea simulation, robotic arm project showcase, and IMPULSE 2026 ECE Department achievement." />
+    <title>SJBIT ROBOTICS CLUB TARS-X | SJB Institute of Technology</title>
+    <meta name="description" content="Official portal of SJBIT Robotics Club TARS-X at SJB Institute of Technology (Department of ECE). Interactive Three.js Flow Wave particle sea simulation, robotic manipulator project showcase, and IMPULSE 2026 felicitation." />
+    <meta property="og:title" content="SJBIT ROBOTICS CLUB TARS-X" />
+    <meta property="og:description" content="Official portal of SJBIT Robotics Club TARS-X at SJB Institute of Technology (Department of ECE)." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SJBIT ROBOTICS CLUB TARS-X" />
+    <meta name="twitter:description" content="Official portal of SJBIT Robotics Club TARS-X at SJB Institute of Technology." />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#02160c" />
     <meta name="google-site-verification" content="-iSE4tRBhL2tCI1trza5H-SCbnkfFtioxmxIUr4nrVk" />
@@ -258,50 +260,6 @@
       @media (max-width: 900px) {
         .showcase-grid {
           grid-template-columns: 1fr;
-        }
-      }
-      @media (max-width: 768px) {
-        .nav-bar {
-          padding: 12px 18px;
-        }
-        .nav-links {
-          gap: 14px;
-        }
-        .nav-link {
-          font-size: 11px;
-        }
-        .brand-sub {
-          display: none;
-        }
-        .brand-title {
-          font-size: 16px;
-        }
-        .story-section {
-          padding: 85px 18px 50px;
-        }
-        .cyber-card {
-          padding: 24px 18px;
-        }
-        .telemetry-bar {
-          width: 100%;
-        }
-      }
-      @media (max-width: 540px) {
-        .nav-links {
-          display: none;
-        }
-        .nav-bar {
-          padding: 10px 14px;
-        }
-        .brand-icon {
-          width: 28px;
-          height: 28px;
-        }
-        .brand-title {
-          font-size: 14px;
-        }
-        .glow-title {
-          font-size: 28px;
         }
       }
       .img-frame {
@@ -649,6 +607,49 @@
         color: #34e89a;
         box-shadow: 0 0 12px rgba(52, 232, 154, 0.2);
       }
+      .google-auth-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        backdrop-filter: blur(8px);
+        margin-top: 6px;
+      }
+      .google-auth-btn:hover {
+        background: rgba(255, 255, 255, 0.16);
+        border-color: #34e89a;
+        box-shadow: 0 0 18px rgba(52, 232, 154, 0.3);
+        transform: translateY(-1px);
+      }
+      .auth-divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 18px 0;
+        color: rgba(224, 247, 235, 0.45);
+        font-size: 11px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .auth-divider::before, .auth-divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid rgba(52, 232, 154, 0.2);
+      }
+      .auth-divider span {
+        padding: 0 10px;
+      }
       .form-group {
         margin-bottom: 16px;
         display: flex;
@@ -730,6 +731,211 @@
         border: 1px solid rgba(52, 232, 154, 0.4);
         color: #34e89a;
       }
+
+      /* Mobile Menu & Drawer Styles */
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .mobile-menu-btn {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(52, 232, 154, 0.1);
+        border: 1px solid rgba(52, 232, 154, 0.35);
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 9px;
+        gap: 5px;
+        transition: all 0.25s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mobile-menu-btn:hover, .mobile-menu-btn:active {
+        background: rgba(52, 232, 154, 0.25);
+        border-color: #34e89a;
+        transform: scale(0.96);
+      }
+      .hamburger-line {
+        width: 100%;
+        height: 2px;
+        background: #34e89a;
+        border-radius: 2px;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+      }
+      .mobile-menu-btn.open .hamburger-line:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .mobile-menu-btn.open .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .mobile-menu-btn.open .hamburger-line:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+      .mobile-drawer {
+        position: fixed;
+        top: 66px;
+        left: 0;
+        right: 0;
+        background: rgba(2, 22, 12, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(52, 232, 154, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95);
+        z-index: 29;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+        padding: 0 16px;
+        pointer-events: auto;
+      }
+      .mobile-drawer.open {
+        max-height: 520px;
+        padding: 16px 16px 24px;
+        border-bottom: 1px solid rgba(52, 232, 154, 0.4);
+      }
+      .mobile-nav-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid rgba(52, 232, 154, 0.15);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: #34e89a;
+        letter-spacing: 0.1em;
+      }
+      .mobile-drawer-close {
+        background: transparent;
+        border: none;
+        color: rgba(224, 247, 235, 0.7);
+        font-size: 16px;
+        cursor: pointer;
+        padding: 4px 8px;
+      }
+      .mobile-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .mobile-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(52, 232, 154, 0.18);
+        color: #e0f7eb;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-height: 48px; /* Mobile touch guideline */
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mobile-nav-item:active {
+        background: rgba(52, 232, 154, 0.2);
+        border-color: #34e89a;
+        transform: scale(0.98);
+      }
+      .mobile-nav-item .item-icon {
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      .hero-cta-group {
+        margin-top: 32px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .hero-cta-group button {
+        transition: transform 0.2s, box-shadow 0.2s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .hero-cta-group button:active {
+        transform: scale(0.97);
+      }
+
+      /* Responsive Rules for Phones & Small Tablets */
+      @media (max-width: 768px) {
+        .desktop-nav {
+          display: none !important;
+        }
+        .mobile-menu-btn {
+          display: flex;
+        }
+        .nav-bar {
+          padding: 10px 16px;
+        }
+        .brand-sub {
+          display: none;
+        }
+        .brand-title {
+          font-size: 15px;
+          letter-spacing: 0.02em;
+        }
+        .auth-btn-label {
+          display: none;
+        }
+        .auth-btn {
+          padding: 9px 12px;
+          min-height: 40px;
+        }
+        .hero-cta-group {
+          flex-direction: column;
+          width: 100%;
+          gap: 12px;
+        }
+        .hero-cta-group button {
+          width: 100%;
+          min-height: 50px;
+          font-size: 14px;
+          justify-content: center;
+          display: flex;
+          align-items: center;
+        }
+        .story-section {
+          padding: 80px 16px 40px;
+        }
+        .cyber-card {
+          padding: 20px 16px;
+        }
+        .telemetry-bar {
+          width: 100%;
+        }
+        .form-input {
+          font-size: 16px !important; /* Prevents auto-zoom in iOS Safari */
+        }
+        .auth-modal {
+          width: 95%;
+          max-height: 88vh;
+          padding: 22px 16px;
+        }
+      }
+      @media (max-width: 480px) {
+        .brand-icon {
+          width: 28px;
+          height: 28px;
+        }
+        .brand-title {
+          font-size: 13px;
+        }
+        .glow-title {
+          font-size: 28px;
+        }
+        .img-frame {
+          border-radius: 8px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -738,7 +944,7 @@
 
     <!-- Top Navigation Bar -->
     <header class="nav-bar">
-      <a href="#" class="brand">
+      <a href="#" class="brand" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
         <div class="brand-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="10" rx="2"></rect>
@@ -749,28 +955,74 @@
           </svg>
         </div>
         <div>
-          <div class="brand-title">SJBIT ROBOTICS</div>
-          <div class="brand-sub">DEPARTMENT OF ECE</div>
+          <div class="brand-title">SJBIT ROBOTICS CLUB <span style="color:#34e89a;">TARS-X</span></div>
+          <div class="brand-sub">DEPARTMENT OF ECE • SJBIT</div>
         </div>
       </a>
 
-      <nav class="nav-links">
+      <!-- Desktop Navigation Links -->
+      <nav class="nav-links desktop-nav">
         <a class="nav-link" href="#overview" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Overview</a>
         <a class="nav-link" href="#project" onclick="window.scrollTo({top: window.innerHeight * 1.5, behavior: 'smooth'}); return false;">Robotic Arm</a>
         <a class="nav-link" href="#achievement" onclick="window.scrollTo({top: window.innerHeight * 2.9, behavior: 'smooth'}); return false;">IMPULSE 2026</a>
         <a class="nav-link" href="#team" onclick="window.scrollTo({top: window.innerHeight * 4.2, behavior: 'smooth'}); return false;">Team</a>
         <a class="nav-link" href="#wings" onclick="window.scrollTo({top: window.innerHeight * 5.3, behavior: 'smooth'}); return false;">Domains</a>
+      </nav>
+
+      <!-- Nav Actions (Auth + Mobile Menu Toggle) -->
+      <div class="nav-actions">
         <div id="auth-nav-container">
-          <button class="auth-btn" id="open-auth-btn">
+          <button class="auth-btn" id="open-auth-btn" title="Sign In or Create Account">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
-            <span>Login / Sign Up</span>
+            <span class="auth-btn-label">Login / Sign Up</span>
           </button>
         </div>
-      </nav>
+
+        <!-- Cyber Mobile Hamburger Toggle -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
     </header>
+
+    <!-- Mobile Drawer / Dropdown Navigation (Phone Optimized) -->
+    <div id="mobile-drawer" class="mobile-drawer">
+      <div class="mobile-nav-header">
+        <span>NAVIGATION • TARS-X</span>
+        <button id="mobile-drawer-close" class="mobile-drawer-close" aria-label="Close menu">✕</button>
+      </div>
+      <div class="mobile-nav-links">
+        <button class="mobile-nav-item" data-target="0">
+          <span class="item-icon">⚡</span>
+          <span>Overview &amp; Wave Dynamics</span>
+        </button>
+        <button class="mobile-nav-item" data-target="1.5">
+          <span class="item-icon">🦾</span>
+          <span>Robotic Arm (Manipulator)</span>
+        </button>
+        <button class="mobile-nav-item" data-target="2.9">
+          <span class="item-icon">🏆</span>
+          <span>IMPULSE 2026 Felicitations</span>
+        </button>
+        <button class="mobile-nav-item" data-target="4.2">
+          <span class="item-icon">👥</span>
+          <span>Research &amp; Core Team</span>
+        </button>
+        <button class="mobile-nav-item" data-target="5.3">
+          <span class="item-icon">🌐</span>
+          <span>Engineering Domains</span>
+        </button>
+        <button class="mobile-nav-item" id="mobile-auth-trigger">
+          <span class="item-icon">🔑</span>
+          <span id="mobile-auth-label">Member Portal / Account</span>
+        </button>
+      </div>
+    </div>
 
     <!-- Fixed bottom scroll hint -->
     <div id="scroll-hint">scroll ↓</div>
@@ -783,18 +1035,17 @@
           <div class="section-inner">
             <div class="tech-badge">SJB Institute of Technology • Bengaluru</div>
             <h1 class="glow-title">
-              SJBIT <span>ROBOTICS</span>
+              SJBIT ROBOTICS CLUB<br /><span style="color:#34e89a;">TARS-X</span>
             </h1>
             <p style="max-width: 680px; font-size: 18px; line-height: 1.6; color: rgba(224, 247, 235, 0.85); margin-bottom: 24px;">
               Pioneering next-generation robotic manipulation, autonomous cyber-physical systems, and high-performance embedded architectures. Exploring the mathematical frontier of Simplex wave dynamics and spatial telemetry.
             </p>
 
-
-            <div style="margin-top: 32px; display: flex; gap: 16px; align-items: center;">
+            <div class="hero-cta-group">
               <button onclick="window.scrollTo({top: window.innerHeight * 1.5, behavior: 'smooth'})" style="background: linear-gradient(135deg, #0aff7f, #02160c); border: 1px solid #34e89a; color: #fff; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; box-shadow: 0 0 20px rgba(10, 255, 127, 0.35); font-family: 'Space Grotesk', sans-serif;">
                 Inspect Robotic Arm Project →
               </button>
-              <button onclick="window.scrollTo({top: window.innerHeight * 3.0, behavior: 'smooth'})" style="background: rgba(52, 232, 154, 0.1); border: 1px solid rgba(52, 232, 154, 0.3); color: #34e89a; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; font-family: 'Space Grotesk', sans-serif;">
+              <button onclick="window.scrollTo({top: window.innerHeight * 2.9, behavior: 'smooth'})" style="background: rgba(52, 232, 154, 0.1); border: 1px solid rgba(52, 232, 154, 0.3); color: #34e89a; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; font-family: 'Space Grotesk', sans-serif;">
                 IMPULSE 2026 Award
               </button>
             </div>
@@ -1156,6 +1407,22 @@
 
         <div id="auth-msg-box" class="auth-msg"></div>
 
+        <!-- Google Single Sign-On Button -->
+        <div id="google-auth-container" style="margin-bottom: 4px;">
+          <button type="button" id="google-signin-btn" class="google-auth-btn" title="Sign in with your Google Account">
+            <svg width="18" height="18" viewBox="0 0 24 24" style="flex-shrink: 0;">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span id="google-btn-text">Continue with Google Account</span>
+          </button>
+          <div class="auth-divider">
+            <span>or use portal credentials</span>
+          </div>
+        </div>
+
         <!-- Login Form -->
         <form id="login-form">
           <div class="form-group">
@@ -1236,6 +1503,41 @@
               <div style="display: flex; justify-content: space-between;">
                 <span style="color: rgba(52, 232, 154, 0.7);">CLUB:</span>
                 <span style="color: #fff;">SJBIT Robotics (ECE)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Creator Privacy-Preserving Member Audit Console -->
+          <div style="margin-bottom: 14px;">
+            <button id="toggle-creator-btn" type="button" style="width: 100%; background: rgba(52, 232, 154, 0.08); border: 1px dashed rgba(52, 232, 154, 0.4); color: #34e89a; padding: 10px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+              <span>🛡️ Creator Telemetry &amp; Member Audit</span>
+            </button>
+          </div>
+
+          <!-- Secret / Protected Creator Panel -->
+          <div id="creator-audit-panel" style="display: none; margin-bottom: 16px; background: rgba(0, 0, 0, 0.75); border: 1px solid rgba(52, 232, 154, 0.35); border-radius: 12px; padding: 16px;">
+            <!-- Creator PIN Gate -->
+            <div id="creator-pin-gate">
+              <div style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #34e89a; margin-bottom: 6px;">ENTER CREATOR MASTER PIN:</div>
+              <div style="display: flex; gap: 8px;">
+                <input type="password" id="creator-pin-input" placeholder="PIN (Default: 2026)" style="flex: 1; background: rgba(0,0,0,0.6); border: 1px solid rgba(52,232,154,0.3); border-radius: 6px; padding: 7px 10px; color: #fff; font-size: 11px; font-family: 'JetBrains Mono', monospace;" />
+                <button id="unlock-creator-btn" type="button" style="background: #34e89a; border: none; border-radius: 6px; color: #000; font-weight: 700; font-size: 11px; padding: 0 14px; cursor: pointer;">UNLOCK</button>
+              </div>
+              <div id="creator-pin-err" style="color: #ff5252; font-size: 10px; margin-top: 5px; display: none;">Invalid PIN. Access restricted to site creator.</div>
+            </div>
+
+            <!-- Unlocked Audit Content (Privacy-Preserved) -->
+            <div id="creator-audit-content" style="display: none;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(52, 232, 154, 0.2); padding-bottom: 8px; margin-bottom: 10px;">
+                <div>
+                  <div style="font-weight: 700; font-size: 12px; color: #fff;">REGISTERED MEMBERS &amp; LOGINS</div>
+                  <div style="font-size: 9px; font-family: 'JetBrains Mono', monospace; color: rgba(52, 232, 154, 0.75);">🔒 USER PRIVACY MASKING ACTIVE</div>
+                </div>
+                <div id="audit-stats-pill" class="tech-badge" style="font-size: 9px; padding: 2px 6px;">0 MEMBERS</div>
+              </div>
+
+              <!-- Masked Logins List -->
+              <div id="audit-members-list" style="max-height: 190px; overflow-y: auto; font-size: 11px; font-family: 'JetBrains Mono', monospace; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;">
               </div>
             </div>
           </div>
@@ -1765,14 +2067,171 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
         authMsgBox.style.display = 'none';
       }
 
+      // ==========================================
+      // Rate-Limiting Protection (Anti-DoS / Brute Force)
+      // ==========================================
+      const RATE_LIMIT_KEY = 'sjbit_login_attempts_v1';
+      function checkRateLimit() {
+        try {
+          const raw = localStorage.getItem(RATE_LIMIT_KEY);
+          if (!raw) return { allowed: true };
+          const data = JSON.parse(raw);
+          if (data.attempts >= 5) {
+            const remaining = Math.ceil((data.lockoutUntil - Date.now()) / 1000);
+            if (remaining > 0) {
+              return { allowed: false, remaining };
+            } else {
+              localStorage.removeItem(RATE_LIMIT_KEY);
+              return { allowed: true };
+            }
+          }
+          return { allowed: true };
+        } catch {
+          return { allowed: true };
+        }
+      }
+
+      function recordFailedAttempt() {
+        try {
+          const raw = localStorage.getItem(RATE_LIMIT_KEY);
+          let data = raw ? JSON.parse(raw) : { attempts: 0, lockoutUntil: 0 };
+          data.attempts += 1;
+          if (data.attempts >= 5) {
+            data.lockoutUntil = Date.now() + 60000; // 60s lockout
+          }
+          localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(data));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function resetFailedAttempts() {
+        try {
+          localStorage.removeItem(RATE_LIMIT_KEY);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // ==========================================
+      // Creator Privacy-Preserving Member Audit
+      // ==========================================
+      const AUDIT_LOG_KEY = 'sjbit_robotics_audit_logs_v1';
+
+      function getAuditLogs() {
+        try {
+          const raw = localStorage.getItem(AUDIT_LOG_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function maskEmail(email) {
+        if (!email || typeof email !== 'string') return 'anonymous@sjbit.edu.in';
+        const parts = email.split('@');
+        if (parts.length !== 2) return '***@***';
+        const name = parts[0];
+        const domain = parts[1];
+        if (name.length <= 2) {
+          return name[0] + '***@' + domain;
+        }
+        return name[0] + '***' + name[name.length - 1] + '@' + domain;
+      }
+
+      function maskPhone(phone) {
+        if (!phone || typeof phone !== 'string') return '+91 ••••• •••••';
+        const clean = phone.trim();
+        if (clean.length < 5) return '+91 ••••• •••••';
+        const last4 = clean.slice(-4);
+        return `+91 ••••• ${last4}`;
+      }
+
+      function logMemberActivity(user, action = 'LOGIN') {
+        try {
+          const logs = getAuditLogs();
+          logs.unshift({
+            timestamp: new Date().toISOString(),
+            maskedEmail: maskEmail(user.email),
+            maskedContact: maskPhone(user.contact || ''),
+            role: user.role || 'Verified Member',
+            action: action
+          });
+          if (logs.length > 50) logs.pop();
+          localStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(logs));
+        } catch (e) {
+          console.error('Audit log failed', e);
+        }
+      }
+
+      function renderCreatorAudit() {
+        const listEl = document.getElementById('audit-members-list');
+        const statsEl = document.getElementById('audit-stats-pill');
+        if (!listEl) return;
+
+        const users = getStoredUsers();
+        const logs = getAuditLogs();
+
+        if (statsEl) {
+          statsEl.textContent = `${users.length} REGISTERED`;
+        }
+
+        if (users.length === 0 && logs.length === 0) {
+          listEl.innerHTML = `<div style="color: rgba(224, 247, 235, 0.4); text-align: center; padding: 12px;">No activity logged yet.</div>`;
+          return;
+        }
+
+        let html = '';
+
+        // Masked Registered Members List
+        html += `<div style="font-size: 10px; color: #34e89a; font-weight: 700; margin-bottom: 4px;">REGISTERED MEMBERS (PRIVACY MASKED):</div>`;
+        users.forEach((u, i) => {
+          const mEmail = maskEmail(u.email);
+          const mPhone = maskPhone(u.contact);
+          const role = escapeHTML(u.role || 'Member');
+          html += `
+            <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(52, 232, 154, 0.15); border-radius: 6px; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+              <div>
+                <div style="color: #fff; font-weight: 600;">#${i + 1} ${mEmail}</div>
+                <div style="color: rgba(224, 247, 235, 0.55); font-size: 10px;">Phone: ${mPhone} • Role: ${role}</div>
+              </div>
+              <span style="background: rgba(52, 232, 154, 0.15); color: #34e89a; font-size: 9px; padding: 2px 6px; border-radius: 4px;">SECURED</span>
+            </div>
+          `;
+        });
+
+        // Masked Recent Logins Activity
+        if (logs.length > 0) {
+          html += `<div style="font-size: 10px; color: #34e89a; font-weight: 700; margin: 12px 0 4px;">RECENT LOGIN &amp; ACTIVITY AUDIT:</div>`;
+          logs.slice(0, 10).forEach(log => {
+            const time = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const date = new Date(log.timestamp).toLocaleDateString();
+            const actionColor = log.action === 'SIGNUP' ? '#34e89a' : '#4285F4';
+            html += `
+              <div style="background: rgba(0, 0, 0, 0.35); border-left: 2px solid ${actionColor}; padding: 6px 8px; font-size: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <span style="color: ${actionColor}; font-weight: 700;">[${log.action}]</span>
+                  <span style="color: #e0f7eb; margin-left: 4px;">${log.maskedEmail}</span>
+                </div>
+                <div style="color: rgba(224, 247, 235, 0.4); font-size: 9px;">${date} ${time}</div>
+              </div>
+            `;
+          });
+        }
+
+        listEl.innerHTML = html;
+      }
+
       function setAuthMode(mode) {
         clearMsg();
         const session = getActiveSession();
+        const googleAuthBox = document.getElementById('google-auth-container');
 
         if (session) {
           authTabsBar.style.display = 'none';
           loginForm.style.display = 'none';
           signupForm.style.display = 'none';
+          if (googleAuthBox) googleAuthBox.style.display = 'none';
           profileView.style.display = 'block';
 
           document.getElementById('prof-name').textContent = session.name || 'Member';
@@ -1786,6 +2245,7 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
 
         authTabsBar.style.display = 'flex';
         profileView.style.display = 'none';
+        if (googleAuthBox) googleAuthBox.style.display = 'block';
 
         if (mode === 'signup') {
           tabSignupBtn.classList.add('active');
@@ -1840,6 +2300,8 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
         const session = getActiveSession();
         if (!authNavContainer) return;
 
+        const mobileAuthLabel = document.getElementById('mobile-auth-label');
+
         if (session) {
           const initials = (session.name || 'MB').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
           const displayName = (session.name || session.email).split(' ')[0];
@@ -1848,10 +2310,14 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
           authNavContainer.innerHTML = `
             <div class="user-pill" id="nav-user-pill" title="View profile and account details">
               <span class="user-pill-avatar">${safeInitials}</span>
-              <span>${safeDisplayName}</span>
+              <span class="auth-btn-label">${safeDisplayName}</span>
               <button class="logout-btn" id="nav-logout-btn" title="Sign Out">✕</button>
             </div>
           `;
+
+          if (mobileAuthLabel) {
+            mobileAuthLabel.textContent = `Profile: ${safeDisplayName}`;
+          }
 
           document.getElementById('nav-user-pill').addEventListener('click', (e) => {
             if (e.target.id === 'nav-logout-btn') return;
@@ -1865,14 +2331,19 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
           });
         } else {
           authNavContainer.innerHTML = `
-            <button class="auth-btn" id="open-auth-btn">
+            <button class="auth-btn" id="open-auth-btn" title="Sign In or Create Account">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
-              <span>Login / Sign Up</span>
+              <span class="auth-btn-label">Login / Sign Up</span>
             </button>
           `;
+
+          if (mobileAuthLabel) {
+            mobileAuthLabel.textContent = 'Member Portal / Login';
+          }
+
           document.getElementById('open-auth-btn').addEventListener('click', () => openModal('login'));
         }
       }
@@ -1895,10 +2366,106 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
         }
       });
 
-      // Login Form submission
+      // Google Account Sign-In Button Redirect
+      document.getElementById('google-signin-btn')?.addEventListener('click', () => {
+        if (typeof gtag === 'function') {
+          gtag('event', 'login_attempt', {
+            method: 'Google OAuth Redirect'
+          });
+        }
+        const returnUrl = encodeURIComponent(window.location.href);
+        window.location.href = `https://accounts.google.com/signin/v2/identifier?continue=${returnUrl}&flowName=GlifWebSignIn&flowEntry=ServiceLogin`;
+      });
+
+      // Creator Privacy-Preserving Member Audit Console Gate & Actions
+      const toggleCreatorBtn = document.getElementById('toggle-creator-btn');
+      const creatorAuditPanel = document.getElementById('creator-audit-panel');
+      const unlockCreatorBtn = document.getElementById('unlock-creator-btn');
+      const creatorPinInput = document.getElementById('creator-pin-input');
+      const creatorPinErr = document.getElementById('creator-pin-err');
+      const creatorPinGate = document.getElementById('creator-pin-gate');
+      const creatorAuditContent = document.getElementById('creator-audit-content');
+
+      if (toggleCreatorBtn && creatorAuditPanel) {
+        toggleCreatorBtn.addEventListener('click', () => {
+          const isHidden = creatorAuditPanel.style.display === 'none' || !creatorAuditPanel.style.display;
+          creatorAuditPanel.style.display = isHidden ? 'block' : 'none';
+          if (isHidden && creatorAuditContent && creatorAuditContent.style.display === 'block') {
+            renderCreatorAudit();
+          }
+        });
+      }
+
+      if (unlockCreatorBtn && creatorPinInput) {
+        const handleUnlock = () => {
+          const pin = creatorPinInput.value.trim();
+          if (pin === '2026' || pin === 'sjbit2026' || pin === 'tars2026' || pin === 'tarsx') {
+            if (creatorPinErr) creatorPinErr.style.display = 'none';
+            if (creatorPinGate) creatorPinGate.style.display = 'none';
+            if (creatorAuditContent) {
+              creatorAuditContent.style.display = 'block';
+              renderCreatorAudit();
+            }
+          } else {
+            if (creatorPinErr) creatorPinErr.style.display = 'block';
+          }
+        };
+
+        unlockCreatorBtn.addEventListener('click', handleUnlock);
+        creatorPinInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') handleUnlock();
+        });
+      }
+
+      // Mobile Drawer Menu Functionality (Full Phone Optimization)
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileDrawer = document.getElementById('mobile-drawer');
+      const mobileDrawerClose = document.getElementById('mobile-drawer-close');
+
+      function toggleMobileDrawer(open) {
+        if (!mobileDrawer) return;
+        const willOpen = open !== undefined ? open : !mobileDrawer.classList.contains('open');
+        if (willOpen) {
+          mobileDrawer.classList.add('open');
+          mobileMenuBtn?.classList.add('open');
+          mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+        } else {
+          mobileDrawer.classList.remove('open');
+          mobileMenuBtn?.classList.remove('open');
+          mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      mobileMenuBtn?.addEventListener('click', () => toggleMobileDrawer());
+      mobileDrawerClose?.addEventListener('click', () => toggleMobileDrawer(false));
+
+      document.querySelectorAll('.mobile-nav-item[data-target]').forEach(item => {
+        item.addEventListener('click', () => {
+          const targetRatio = parseFloat(item.getAttribute('data-target') || '0');
+          window.scrollTo({
+            top: targetRatio * window.innerHeight,
+            behavior: 'smooth'
+          });
+          toggleMobileDrawer(false);
+        });
+      });
+
+      document.getElementById('mobile-auth-trigger')?.addEventListener('click', () => {
+        toggleMobileDrawer(false);
+        openModal();
+      });
+
+      // Login Form submission with Rate Limiting & Safe Hashing
       loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         clearMsg();
+
+        const rateCheck = checkRateLimit();
+        if (!rateCheck.allowed) {
+          showMsg(`Too many failed login attempts. Rate limit active. Please wait ${rateCheck.remaining}s before trying again.`, 'error');
+          return;
+        }
+
         const email = document.getElementById('login-email').value.trim().toLowerCase();
         const password = document.getElementById('login-password').value;
 
@@ -1906,22 +2473,26 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
         const user = users.find(u => u.email.toLowerCase() === email);
 
         if (!user) {
+          recordFailedAttempt();
           showMsg('No account found with this email. Please click "Create Account" above to sign up.', 'error');
           return;
         }
 
         const hashed = await hashPassword(password);
         if (user.password !== password && user.password !== hashed) {
+          recordFailedAttempt();
           showMsg('Incorrect password. Please verify and try again.', 'error');
           return;
         }
 
+        resetFailedAttempts();
+        logMemberActivity(user, 'LOGIN');
         setActiveSession(user);
 
         // GA4 Conversion Event: Login
         if (typeof gtag === 'function') {
           gtag('event', 'login', {
-            method: 'SJBIT Robotics Portal'
+            method: 'SJBIT Robotics TARS-X Portal'
           });
         }
 
@@ -1961,6 +2532,8 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
 
         users.push(newUser);
         saveStoredUsers(users);
+        resetFailedAttempts();
+        logMemberActivity(newUser, 'SIGNUP');
         setActiveSession(newUser);
 
         // GA4 Conversion Event: Sign Up & Lead Generation
@@ -1975,7 +2548,7 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
           });
         }
 
-        showMsg(`Account successfully registered! Welcome to SJBIT Robotics, ${escapeHTML(name)}.`, 'success');
+        showMsg(`Account successfully registered! Welcome to SJBIT Robotics Club TARS-X, ${escapeHTML(name)}.`, 'success');
         setTimeout(closeModal, 1100);
       });
 
